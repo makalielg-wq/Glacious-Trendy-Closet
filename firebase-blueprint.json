@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user account information and preferences.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique identifier for the user." },
+        "email": { "type": "string", "format": "email", "description": "User's email address." },
+        "displayName": { "type": "string", "description": "User's display name." },
+        "photoURL": { "type": "string", "format": "uri", "description": "URL to user's profile picture." },
+        "address": { "type": "string", "description": "User's shipping address." },
+        "phoneNumber": { "type": "string", "description": "User's contact number." },
+        "role": { "type": "string", "enum": ["user", "admin"], "description": "User's access level." }
+      },
+      "required": ["uid", "email", "displayName"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Represents a fashion item in the store.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "originalPrice": { "type": "number", "description": "The price before discount." },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "sizes": { "type": "array", "items": { "type": "string" } },
+        "colors": { "type": "array", "items": { "type": "string" } },
+        "inStock": { "type": "boolean" },
+        "isFeatured": { "type": "boolean" },
+        "rating": { "type": "number" },
+        "reviewsCount": { "type": "integer" }
+      },
+      "required": ["name", "price", "category", "images"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Represents a customer purchase.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "items": { "type": "array" },
+        "total": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "processing", "shipped", "delivered", "cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "shippingAddress": { "type": "string" }
+      },
+      "required": ["userId", "items", "total", "status", "createdAt", "shippingAddress"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "User feedback on a product.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "productId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "userId", "userName", "rating", "comment", "createdAt"]
+    },
+    "Wishlist": {
+      "title": "Wishlist Item",
+      "description": "A product saved by a user for later.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "productId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "productId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents."
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Store products."
+    },
+    "/categories/{categoryId}": {
+      "schema": "object",
+      "description": "Product categories."
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Customer orders."
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Product reviews."
+    },
+    "/wishlists/{wishlistId}": {
+      "schema": "Wishlist",
+      "description": "User wishlist items."
+    }
+  }
+}
